@@ -30,5 +30,16 @@ This example demonstrates spoofind through two ways -- Stealing cookies programm
 ## For you to answer
 
 1. Briefly explain the spoofing vulnerability in **insecure.ts**.
+
+- The spoofing vulnerability in insecure.ts arises from the insecure handling of session cookies. Specifically, the server sets the httpOnly property of the session cookie to false, which allows client-side scripts to access the cookie. This makes it susceptible to Cross-Site Scripting (XSS) attacks, where an attacker can execute JavaScript in the context of the user's browser to steal session cookies. Additionally, the lack of CSRF protection allows attackers to perform unauthorized actions on behalf of the user, as demonstrated in the mal-csrf.html file, where a form submission can trigger sensitive operations without the user's consent.
+
 2. Briefly explain different ways in which vulnerability can be exploited.
+
+- An attacker can inject malicious JavaScript into a web page that is viewed by the victim. Since the session cookie is accessible due to the httpOnly flag being set to false, the attacker can use JavaScript to read the cookie and send it to their own server, effectively hijacking the user's session.
+- An attacker can craft a link that, when clicked by the victim, redirects them to a malicious server (like mal.ts) that captures the session cookie. This can be done through social engineering tactics, such as phishing emails or misleading advertisements.
+
 3. Briefly explain why **secure.ts** does not have the spoofing vulnerability in **insecure.ts**.
+
+- In secure.ts, the httpOnly property of the session cookie is set to true. This prevents client-side scripts from accessing the cookie, thereby mitigating the risk of Cross-Site Scripting (XSS) attacks that could steal session cookies.
+- The sameSite attribute is set to true in secure.ts, which helps protect against Cross-Site Request Forgery (CSRF) attacks. This attribute restricts how cookies are sent with cross-origin requests, ensuring that the session cookie is not sent along with requests initiated by third-party sites.
+- The session secret in secure.ts is passed as a command-line argument, which can enhance security by not hardcoding sensitive information directly in the source code. This practice helps prevent exposure of the secret in version control systems.
